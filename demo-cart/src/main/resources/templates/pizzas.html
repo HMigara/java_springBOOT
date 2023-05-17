@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Pizzas</title>
+  <link rel="stylesheet" th:href="@{/css/stylep.css}">
+  <style>
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+input[type=number] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea{
+ width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+button[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button[type=submit]:hover {
+    background-color: #45a049;
+}
+</style>
+
+
+
+
+
+</head>
+<body>
+
+
+
+
+<h3>Add Pizza</h3>
+<form th:action="@{/pizzas}" th:object="${pizza}" method="post">
+  <div>
+    <label>Size:</label>
+    <input type="text" th:field="*{size}" required />
+  </div>
+  <div>
+    <label>Price:</label>
+    <input type="number" step="0.01" min="0.01" th:field="*{price}" required />
+  </div>
+  <div>
+    <label>Details:</label>
+    <textarea th:field="*{details}" required></textarea>
+  </div>
+  <button type="submit">Add Pizza</button>
+
+</form>
+
+<h2>Pizzas</h2>
+<a href="#" th:href="@{/cart}">Show Cart</a>
+<table>
+  <thead>
+  <tr>
+    <th>Details</th>
+    <th>size</th>
+    <th>price</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="pizza : ${pizzas}">
+    <td th:text="${pizza.details}"></td>
+    <td th:text="${pizza.size}"></td>
+    <td th:text="${pizza.price}"></td>
+    <td><button th:attr="data-pizza-id=${pizza.id}" class="add-cart-btn">Add to Cart</button></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<script>
+
+const AddCartBtns = document.querySelectorAll('.add-cart-btn');
+
+AddCartBtns.forEach(cartBtn => {
+  cartBtn.addEventListener("click", (event) => {
+    const id = event.target.getAttribute("data-pizza-id");
+    fetch('/addcart/' + id, {
+      method: 'POST',
+    })
+    .then(function(response) {
+      if (!response.ok) {
+        throw new Error('Error adding item to cart.');
+      }
+      alert('Item added to cart!');
+    })
+    .catch(function(error) {
+      alert(error.message);
+    });
+  });
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Checkout</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Pizza</th>
+    <th>Quantity</th>
+    <th>Price</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="item : ${items}">
+    <td th:text="${item.pizza.details}"></td>
+    <td th:text="${item.quantity}"></td>
+    <td th:text="${item.pizza.price * item.quantity}"></td>
+  </tr>
+  </tbody>
+</table>
+<p>Total: Rs.<span th:text="${total}"></span></p>
+<form th:action="@{/checkout}" method="post">
+  <button type="submit">Confirm Order</button>
+</form>
+
+</body>
+</html>
